@@ -1,7 +1,5 @@
 from __future__ import annotations
-from dataclasses import dataclass
 from typing import Any
-from types import NoneType
 import json
 from .operations import Operation, jl_operations
 from .errors import JsonLogicArgumentError
@@ -44,7 +42,12 @@ class Variable(Operand):
 class Expression(Operand):
     """A JSONLogic expression"""
 
-    def __init__(self, op: Operation, o1: Variable | Expression, *on: Variable | Expression | PyJsonType):
+    def __init__(
+        self,
+        op: Operation,
+        o1: Variable | Expression,
+        *on: Variable | Expression | PyJsonType,
+    ):
         super().__init__()
         # if op is None then this expression is just a native Selector held in o1.
         self.op = op
@@ -56,7 +59,10 @@ class Expression(Operand):
         self.on = on
 
     def to_dict(self):
-        return {str(self.op): [self.o1.to_dict()] + list(x.to_dict() if isinstance(x, Operand) else x for x in self.on)}
+        return {
+            str(self.op): [self.o1.to_dict()]
+            + list(x.to_dict() if isinstance(x, Operand) else x for x in self.on)
+        }
 
 
 # class Type(ABC):

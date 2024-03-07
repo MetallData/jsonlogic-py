@@ -8,7 +8,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Callable
+from typing import Callable
 from .classes import Entity
 
 
@@ -57,8 +57,6 @@ _jl_or = Operation('or', 2)
 # # to be modeled after Pandas' str.contains
 _jl_contains = Operation('in', 2)
 _jl_regex = Operation('regex', 2)
-
-_jl_contains = lambda regex=False: _jl_contains_regex if regex else _jl_contains_in
 
 # string and array concatenation
 _jl_cat = Operation('cat', None)
