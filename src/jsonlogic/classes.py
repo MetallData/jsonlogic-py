@@ -1,6 +1,7 @@
-from abc import ABC
-
+# pylint: disable=too-few-public-methods
 """ Abstract base class for JsonLogic """
+
+from abc import ABC
 
 
 class Entity(ABC):

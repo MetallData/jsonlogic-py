@@ -1,11 +1,12 @@
+""" JSONLogic emitters """
+
 from __future__ import annotations
 from typing import Any
 import json
 from .operations import Operation, jl_operations
 from .errors import JsonLogicArgumentError
 from .classes import Entity
-
-PyJsonType = int | float | bool | str | list | dict
+from .jsontypes import PyJsonType, deduce_type
 
 
 class Operand(Entity):
@@ -16,26 +17,49 @@ class Operand(Entity):
             setattr(cls, dunder, lambda self, *x, o=op: Expression(o, self, *x))
         return super().__new__(cls)
 
-    def to_dict(self) -> dict[str, Any]:
-        """represents the object as as dictionary"""
+    def prepare(self) -> Any:
+        """prepares the structure for json by converting it into something that can be dumped"""
         raise NotImplementedError()
 
     def to_json(self) -> str:
         """represents the object as JSON"""
-        return json.dumps(self.to_dict())
+        return json.dumps(self.prepare())
 
     def __str__(self):
         return self.to_json()
 
 
+class Literal(Operand):
+    """A JSONLogic literal."""
+
+    def __init__(self, val: PyJsonType | Literal, docstr: str | None = None):
+        super().__init__()
+        self._rawval: PyJsonType = val._rawval if isinstance(val, Literal) else val
+
+        self.type = deduce_type(val)
+        if docstr is not None:
+            self.__doc__ = docstr
+
+    def __repr__(self):
+        return str(self.type)
+
+    def __str__(self):
+        return str(self.type)
+
+    def prepare(self) -> PyJsonType:
+        return self.type.prepare()
+
+
 class Variable(Operand):
     """A JSONLogic variable"""
 
-    def __init__(self, var: str):
+    def __init__(self, var: str, docstr: str | None = None):
         super().__init__()
         self.var = var
+        if docstr is not None:
+            self.__doc__ = docstr
 
-    def to_dict(self):
+    def prepare(self):
         return {"var": self.var}
 
 
@@ -46,7 +70,7 @@ class Expression(Operand):
         self,
         op: Operation,
         o1: Variable | Expression,
-        *on: Variable | Expression | PyJsonType,
+        *on: Operand | PyJsonType,
     ):
         super().__init__()
         # if op is None then this expression is just a native Selector held in o1.
@@ -56,13 +80,11 @@ class Expression(Operand):
             raise JsonLogicArgumentError(
                 f"incorrect number of arguments for {op}: wanted {op.arity}, got {len(on) + 1}"
             )
-        self.on = on
+        # add the remaining variables, casting them to Literals if they're not Variables, Expressions, or Literals.
+        self.on = tuple(Literal(o) if not isinstance(o, Operand) else o for o in on)
 
-    def to_dict(self):
-        return {
-            str(self.op): [self.o1.to_dict()]
-            + list(x.to_dict() if isinstance(x, Operand) else x for x in self.on)
-        }
+    def prepare(self):
+        return {str(self.op): [self.o1.prepare()] + list(x.prepare() if isinstance(x, Operand) else x for x in self.on)}
 
 
 # class Type(ABC):

@@ -4,10 +4,10 @@ import sys
 sys.path.append('src')
 
 from json_logic import jsonLogic
+from typing import Any
 import jsonlogic as jl
 from jsonlogic.errors import JsonLogicArgumentError
 from dataclasses import dataclass
-from typing import Any
 
 
 @dataclass
@@ -41,7 +41,7 @@ def _s():
 
 
 def assert_op(e: jl.Expression, d):
-    assert jsonLogic(e.to_dict(), d)
+    assert jsonLogic(e.prepare(), d)
 
 
 def test_lt_gt_ne(_s, _i, _f):
@@ -113,6 +113,12 @@ def test_bad_args():
         o = jl.Operation('foo', 1)
         v = jl.Variable('var1')
         jl.Expression(o, v, 1)
+
+
+def test_operations():
+    o = jl.Operation("foo", 1)
+    assert repr(o) == "foo"
+    assert str(o) == "foo"
 
 
 # def test_float_eq_add_mul_truediv_floordiv(var1, var2, var4, var5, data_float):
