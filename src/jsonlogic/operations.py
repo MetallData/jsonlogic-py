@@ -83,6 +83,7 @@ jl_operations: dict[str, Operation | Callable[..., Operation]] = {
     "__and__": _jl_and,
     "__xor__": _jl_xor,
     "__or__": _jl_or,
+    "__invert__": _jl_not,
     "contains": _jl_contains,
     "regex": _jl_regex,
     "cat": _jl_cat,
