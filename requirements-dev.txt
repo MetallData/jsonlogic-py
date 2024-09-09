@@ -1,3 +1,4 @@
 pytest
 coverage
 json-logic-qubit
+flake8
