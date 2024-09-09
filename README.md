@@ -6,8 +6,6 @@ An example:
 
 ```python
 >>> from jsonlogic import Variable
-
->>> from jsonlogic import Variable
 >>> v1 = Variable('var1')
 >>> v2 = Variable('var2')
 >>> e = (v1 < v2)
