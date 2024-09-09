@@ -2,3 +2,4 @@ pytest
 coverage
 json-logic-qubit
 flake8
+mypy
