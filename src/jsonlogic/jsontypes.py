@@ -12,61 +12,61 @@ PyJsonType = int | float | bool | str | list | dict
 
 
 class JsonType(ABC):
-    '''The abstract base class for JSON types'''
+    """The abstract base class for JSON types"""
 
-    typename = 'UNDEFINED'
+    typename = "UNDEFINED"
 
     def __init__(self, val):
         self.val = val
 
     def __str__(self):
-        return f'[{self.typename}]{self.val}'
+        return f"[{self.typename}]{self.val}"
 
     def prepare(self) -> PyJsonType:
-        '''Prepares the type for JSON serialization'''
-        raise NotImplementedError('class has not defined prepare()')
+        """Prepares the type for JSON serialization"""
+        raise NotImplementedError("class has not defined prepare()")
 
 
 class JsonNumber(JsonType):
-    '''A JSON Number type'''
+    """A JSON Number type"""
 
-    typename = 'Number'
+    typename = "Number"
 
     def prepare(self):
         return int(self.val) if isinstance(self.val, int) else float(self.val)
 
 
 class JsonBool(JsonType):
-    '''A JSON Boolean type'''
+    """A JSON Boolean type"""
 
-    typename = 'Boolean'
+    typename = "Boolean"
 
     def prepare(self) -> bool:
         return bool(self.val)
 
 
 class JsonStr(JsonType):
-    '''A JSON String type'''
+    """A JSON String type"""
 
-    typename = 'String'
+    typename = "String"
 
     def prepare(self) -> str:
         return str(self.val)
 
 
 class JsonArray(JsonType):
-    '''A JSON Array type'''
+    """A JSON Array type"""
 
-    typename = 'Array'
+    typename = "Array"
 
     def prepare(self) -> list:
         return list(self.val)
 
 
 class JsonObj(JsonType):
-    '''A JSON Object type'''
+    """A JSON Object type"""
 
-    typename = 'Object'
+    typename = "Object"
 
     def prepare(self) -> dict:
         return dict(self.val)
@@ -83,5 +83,7 @@ def deduce_type(val: Any) -> JsonType:
     if isinstance(val, dict):
         return JsonObj(val)
     if not isinstance(val, str):
-        warnings.warn(f"cannot deduce type of {val} ({type(val)}); assuming string", UserWarning)
+        warnings.warn(
+            f"cannot deduce type of {val} ({type(val)}); assuming string", UserWarning
+        )
     return JsonStr(str(val))
