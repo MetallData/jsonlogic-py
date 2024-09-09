@@ -1,10 +1,10 @@
 import pytest
 import sys
 
-sys.path.append('src')
+sys.path.append("src")
 
 from json_logic import jsonLogic
-from typing import Any
+
 import jsonlogic as jl
 from jsonlogic.errors import JsonLogicArgumentError
 from dataclasses import dataclass
@@ -25,19 +25,19 @@ class TV(dict):
 
 @pytest.fixture
 def _i():
-    return TV({n: (f'var{n}', jl.Variable(f'var{n}')) for n in range(1, 5)})
+    return TV({n: (f"var{n}", jl.Variable(f"var{n}")) for n in range(1, 5)})
 
 
 @pytest.fixture
 def _f():
     fs = [1.1, 2.0, 2.1, 2.2, 3.3, 4.4]
-    return TV({n: (f'var{int(n*10)}', jl.Variable(f'var{int(n*10)}')) for n in fs})
+    return TV({n: (f"var{int(n*10)}", jl.Variable(f"var{int(n*10)}")) for n in fs})
 
 
 @pytest.fixture
 def _s():
-    ss = ['a', 'b', 'c', 'd', 'e']
-    return TV({n: (f'var{n}', jl.Variable(f'var{n}')) for n in ss})
+    ss = ["a", "b", "c", "d", "e"]
+    return TV({n: (f"var{n}", jl.Variable(f"var{n}")) for n in ss})
 
 
 def assert_op(e: jl.Expression, d):
@@ -62,11 +62,11 @@ def test_lt_gt_ne(_s, _i, _f):
         _f[4.4] != _f[2.2],
     ]
     test_str = {
-        _s['a'] < _s['b'],
-        _s['a'] <= _s['a'],
-        _s['b'] > _s['a'],
-        _s['b'] >= _s['b'],
-        _s['a'] != _s['b'],
+        _s["a"] < _s["b"],
+        _s["a"] <= _s["a"],
+        _s["b"] > _s["a"],
+        _s["b"] >= _s["b"],
+        _s["a"] != _s["b"],
     }
 
     for t in test_int:
@@ -110,8 +110,8 @@ def test_eq_add_mul_truediv_floordiv(_i, _f):
 
 def test_bad_args():
     with pytest.raises(JsonLogicArgumentError):
-        o = jl.Operation('foo', 1)
-        v = jl.Variable('var1')
+        o = jl.Operation("foo", 1)
+        v = jl.Variable("var1")
         jl.Expression(o, v, 1)
 
 

@@ -1,7 +1,7 @@
 import pytest
 import sys
 
-sys.path.append('src')
+sys.path.append("src")
 
 from jsonlogic import Expression, Variable, Literal, Operand, Operation
 from jsonlogic.classes import Entity
