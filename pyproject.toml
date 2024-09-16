@@ -3,7 +3,7 @@ requires = ["setuptools >= 68.0.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "jsonlogic"
+name = "jsonlogic-py"
 version = "0.1-dev"
 authors = [
   { name="Peter Pirkelbauer"}, { name="Seth Bromberger"}
@@ -15,7 +15,6 @@ requires-python = ">=3.10"
 classifiers = [
         "Development Status :: 3 - Alpha",
         "Programming Language :: Python :: 3",
-        "Programming Language :: C++",
         "Intended Audience :: Science/Research",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent"
