@@ -84,7 +84,10 @@ class Expression(Operand):
         self.on = tuple(Literal(o) if not isinstance(o, Operand) else o for o in on)
 
     def prepare(self):
-        return {str(self.op): [self.o1.prepare()] + list(x.prepare() if isinstance(x, Operand) else x for x in self.on)}
+        return {
+            str(self.op): [self.o1.prepare()]
+            + list(x.prepare() if isinstance(x, Operand) else x for x in self.on)
+        }
 
 
 # class Type(ABC):
